@@ -6,19 +6,31 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    CharacterController charC;
+    Camera cam;
+
+    [Header("Movement Settings")]
     [SerializeField] float movementSpeed = 2.0f;
     [SerializeField] float JumpHeight = 1.0f;
     Vector3 playerVelocity;
     bool isGrounded;
+    bool wasGrounded;
+    bool hasJumped;
+    bool hasClicked = false;
+    //InputBuffer
+    [SerializeField] float inputBuffer = 1f; //this variable will only be total time of inputBuffer
+    float buffer;
+    //CoyoteTime
+    [SerializeField] float coyoteTimeDuration = .5f; //this variable will be the total time of coyote
+    float coyoteTimer;
+    bool inCoyote = false;
 
-    CharacterController charC;
-    Camera cam;
-
+    [Header("Melting Settings")]
     bool isAlive = true;
     bool isLit = true;
     [SerializeField] float maxDuration = 10f;
+    [SerializeField] float duration;
     public float meltModifier = 1f;
-    float duration;
 
     void Start()
     {
@@ -54,30 +66,70 @@ public class PlayerMovement : MonoBehaviour
 
         //Jump
         isGrounded = charC.isGrounded;
+
         if (isGrounded && playerVelocity.y < 0)
         {
             playerVelocity.y = -.5f;
+            hasJumped = false;
         }
+
         if (Input.GetButtonDown("Jump"))
         {
-            Debug.Log("SPace");
-            Debug.Log(charC.isGrounded);
             if (isGrounded)
             {
-                playerVelocity.y += Mathf.Sqrt(JumpHeight * -3.0F * Physics.gravity.y);
+                playerVelocity.y = Jump(playerVelocity.y);
+            }
+            else
+            {
+                hasClicked = true;
+                buffer = inputBuffer;
+            }
+        }
+
+        //Input Buffer Logic
+        if (hasClicked && buffer > .0f)
+        {
+            if (isGrounded && !hasJumped)
+            {
+                playerVelocity.y = Jump(playerVelocity.y);
+                hasClicked = false;
+                buffer = .0f;
+            }
+            else
+                buffer -= Time.deltaTime;
+        }
+
+        //CoyoteTime Logic
+        if (wasGrounded && !isGrounded)
+        {
+            inCoyote = true;
+            coyoteTimer = coyoteTimeDuration;
+        }
+        if (inCoyote && !hasJumped)
+        {
+            if (Input.GetButtonDown("Jump") && coyoteTimer > .0f)
+            {
+                playerVelocity.y = Jump(playerVelocity.y);
+                inCoyote = false;
+                coyoteTimer = .0f;
+            }
+            else
+            {
+                coyoteTimer -= Time.deltaTime;
             }
         }
 
         playerVelocity.y += Physics.gravity.y * Time.deltaTime;
         movementDirection.y = playerVelocity.y;
         charC.Move(movementDirection * Time.deltaTime);
+        wasGrounded = isGrounded;
         #endregion
 
         #region CANDLE MELT
 
         if (isLit)
         {
-            duration -=Time.deltaTime*meltModifier;
+            duration -= Time.deltaTime * meltModifier;
         }
         if (duration <= .0f)
         {
@@ -86,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (this.gameObject.transform.localScale.y >= .0f)
         {
-            Vector3 scaleChange = new Vector3(1f,duration /maxDuration, 1f);
+            Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
             this.gameObject.transform.localScale = scaleChange;
         }
 
@@ -102,5 +154,11 @@ public class PlayerMovement : MonoBehaviour
         inputs[1] = Input.GetAxis("Vertical");
 
         return inputs;
+    }
+
+    float Jump(float verticalVelocity)
+    {
+        hasJumped = true;
+        return verticalVelocity + Mathf.Sqrt(JumpHeight * -3.0F * Physics.gravity.y);
     }
 }
