@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -34,7 +35,9 @@ public class PlayerMovement : MonoBehaviour
         right.Normalize();
 
         Vector3 movementDirection = forward * inputs[1] + right * inputs[0];
-        charC.Move(movementDirection * Time.deltaTime * movementSpeed);
+        movementDirection.x *= movementSpeed;
+        movementDirection.z *= movementSpeed;
+        
 
         if (movementDirection != Vector3.zero)
         {
@@ -59,7 +62,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         playerVelocity.y += Physics.gravity.y * Time.deltaTime;
-        charC.Move(playerVelocity * Time.deltaTime);
+        movementDirection.y = playerVelocity.y;
+        charC.Move(movementDirection * Time.deltaTime);
 
         #endregion
     }
