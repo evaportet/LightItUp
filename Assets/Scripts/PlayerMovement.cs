@@ -141,14 +141,6 @@ public class PlayerMovement : MonoBehaviour
             this.gameObject.SetActive(false);
         }
 
-        if (Input.GetButtonDown("ResetCheat"))
-        {
-            duration = maxDuration;
-            isAlive = true;
-            isLit = true;
-            this.gameObject.SetActive(true);    
-        }
-
         #endregion
 
     }
@@ -169,12 +161,20 @@ public class PlayerMovement : MonoBehaviour
         return verticalVelocity + Mathf.Sqrt(JumpHeight * -3.0F * Physics.gravity.y);
     }
 
-    void Respawn(Vector3 respawnPos)
+    public void Respawn(Vector3 respawnPos)
     {
+        Debug.Log("AAAAAAAAA");
         duration = maxDuration;
         isAlive = true;
         isLit = true;
         this.gameObject.transform.position = respawnPos;
-        this.gameObject.SetActive(true);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("RespawnPoint"))
+        {
+            RespawnManager.GetInstance().SetNewRespawnPoint(other);
+        }
     }
 }
