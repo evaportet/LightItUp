@@ -25,9 +25,9 @@ public class PlayerMovement : MonoBehaviour
     float coyoteTimer;
     bool inCoyote = false;
 
-    [Header("Melting Settings")]
-    bool isAlive = true;
-    bool isLit = true;
+    //[Header("Melting Settings")]
+    public bool isAlive { private set; get; } = true;
+    public bool isLit { set; private get; } = true;
     [SerializeField] float maxDuration = 10f;
     [SerializeField] float duration;
     public float meltModifier = 1f;
@@ -37,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
         charC = GetComponent<CharacterController>();
         cam = Camera.main;
         duration = maxDuration;
+        Cursor.visible = false;
     }
 
 
@@ -130,16 +131,22 @@ public class PlayerMovement : MonoBehaviour
         if (isLit)
         {
             duration -= Time.deltaTime * meltModifier;
+            Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
+            this.gameObject.transform.localScale = scaleChange;
         }
         if (duration <= .0f)
         {
             isAlive = false;
             isLit = false;
+            this.gameObject.SetActive(false);
         }
-        if (this.gameObject.transform.localScale.y >= .0f)
+
+        if (Input.GetButtonDown("ResetCheat"))
         {
-            Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
-            this.gameObject.transform.localScale = scaleChange;
+            duration = maxDuration;
+            isAlive = true;
+            isLit = true;
+            this.gameObject.SetActive(true);    
         }
 
         #endregion
@@ -160,5 +167,14 @@ public class PlayerMovement : MonoBehaviour
     {
         hasJumped = true;
         return verticalVelocity + Mathf.Sqrt(JumpHeight * -3.0F * Physics.gravity.y);
+    }
+
+    void Respawn(Vector3 respawnPos)
+    {
+        duration = maxDuration;
+        isAlive = true;
+        isLit = true;
+        this.gameObject.transform.position = respawnPos;
+        this.gameObject.SetActive(true);
     }
 }
