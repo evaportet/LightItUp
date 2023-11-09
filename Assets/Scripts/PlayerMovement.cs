@@ -167,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
         duration = maxDuration;
         isAlive = true;
         isLit = true;
-        this.gameObject.transform.position = respawnPos;
+        charC.Move(respawnPos-this.gameObject.transform.position);
     }
 
     private void OnTriggerEnter(Collider other)

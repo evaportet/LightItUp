@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8262457936621251402}
-  - component: {fileID: 5767017830668175708}
+  - component: {fileID: 8516691077375619802}
   m_Layer: 0
   m_Name: RespawnManager
   m_TagString: Untagged
@@ -30,9 +30,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5767017830668175708
+--- !u!114 &8516691077375619802
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8582497047258393065}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1d150ed747888f44a1715dd622ad875, type: 3}
+  m_Script: {fileID: 11500000, guid: bbb7e5166829109418cd6323e2fa06e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lastRespawnPoint: {x: 0, y: 0, z: 0}

@@ -38,6 +38,7 @@ public class RespawnManager : MonoBehaviour
         if (Input.GetButtonDown("ResetCheat"))
         {
             player.gameObject.SetActive(true);
+            lastRespawnPoint.y += 1;
             pMov.Respawn(lastRespawnPoint);
         }
     }
