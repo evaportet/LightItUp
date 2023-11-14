@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     CharacterController charC;
     Camera cam;
 
+    [SerializeField] GameObject respawnCanvas;
     [Header("Movement Settings")]
     [SerializeField] float movementSpeed = 2.0f;
     [SerializeField] float JumpHeight = 1.0f;
@@ -26,17 +27,19 @@ public class PlayerMovement : MonoBehaviour
     bool inCoyote = false;
 
     [Header("Melting Settings")]
-    bool isAlive = true;
-    bool isLit = true;
     [SerializeField] float maxDuration = 10f;
     [SerializeField] float duration;
+    public bool isAlive { private set; get; } = true;
+    public bool isLit { set; private get; } = true;
     public float meltModifier = 1f;
+
 
     void Start()
     {
         charC = GetComponent<CharacterController>();
         cam = Camera.main;
         duration = maxDuration;
+        Cursor.visible = false;
     }
 
 
@@ -130,16 +133,15 @@ public class PlayerMovement : MonoBehaviour
         if (isLit)
         {
             duration -= Time.deltaTime * meltModifier;
+            Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
+            this.gameObject.transform.localScale = scaleChange;
         }
         if (duration <= .0f)
         {
             isAlive = false;
             isLit = false;
-        }
-        if (this.gameObject.transform.localScale.y >= .0f)
-        {
-            Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
-            this.gameObject.transform.localScale = scaleChange;
+            respawnCanvas.SetActive(true);
+            this.gameObject.SetActive(false);
         }
 
         #endregion
@@ -160,5 +162,22 @@ public class PlayerMovement : MonoBehaviour
     {
         hasJumped = true;
         return verticalVelocity + Mathf.Sqrt(JumpHeight * -3.0F * Physics.gravity.y);
+    }
+
+    public void Respawn(Vector3 respawnPos)
+    {
+        duration = maxDuration;
+        isAlive = true;
+        isLit = true;
+        charC.Move(respawnPos-this.gameObject.transform.position);
+        respawnCanvas.SetActive(false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("RespawnPoint"))
+        {
+            RespawnManager.GetInstance().SetNewRespawnPoint(other);
+        }
     }
 }
