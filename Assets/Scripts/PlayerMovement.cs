@@ -32,6 +32,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float duration;
     public float meltModifier = 1f;
 
+    [SerializeField] GameObject respawnCanvas;
+
     void Start()
     {
         charC = GetComponent<CharacterController>();
@@ -138,6 +140,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isAlive = false;
             isLit = false;
+            respawnCanvas.SetActive(true);
             this.gameObject.SetActive(false);
         }
 
@@ -163,11 +166,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void Respawn(Vector3 respawnPos)
     {
-        Debug.Log("AAAAAAAAA");
         duration = maxDuration;
         isAlive = true;
         isLit = true;
         charC.Move(respawnPos-this.gameObject.transform.position);
+        respawnCanvas.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
