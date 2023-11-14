@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     CharacterController charC;
     Camera cam;
 
+    [SerializeField] GameObject respawnCanvas;
     [Header("Movement Settings")]
     [SerializeField] float movementSpeed = 2.0f;
     [SerializeField] float JumpHeight = 1.0f;
@@ -25,14 +26,13 @@ public class PlayerMovement : MonoBehaviour
     float coyoteTimer;
     bool inCoyote = false;
 
-    //[Header("Melting Settings")]
-    public bool isAlive { private set; get; } = true;
-    public bool isLit { set; private get; } = true;
+    [Header("Melting Settings")]
     [SerializeField] float maxDuration = 10f;
     [SerializeField] float duration;
+    public bool isAlive { private set; get; } = true;
+    public bool isLit { set; private get; } = true;
     public float meltModifier = 1f;
 
-    [SerializeField] GameObject respawnCanvas;
 
     void Start()
     {
