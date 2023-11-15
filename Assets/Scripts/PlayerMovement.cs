@@ -29,9 +29,12 @@ public class PlayerMovement : MonoBehaviour
     [Header("Melting Settings")]
     [SerializeField] float maxDuration = 10f;
     [SerializeField] float duration;
-    public bool isAlive { private set; get; } = true;
-    public bool isLit { set; private get; } = true;
+    [SerializeField] float dropInterval = 5f;
+    float nextDrop;
+    public bool isAlive { get; private set; } = true;
+    public bool isLit { get; private set; } = true;
     public float meltModifier = 1f;
+    public GameObject waxDrop;
 
 
     void Start()
@@ -39,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
         charC = GetComponent<CharacterController>();
         cam = Camera.main;
         duration = maxDuration;
+        nextDrop = maxDuration - dropInterval;
         Cursor.visible = false;
     }
 
@@ -135,6 +139,12 @@ public class PlayerMovement : MonoBehaviour
             duration -= Time.deltaTime * meltModifier;
             Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
             this.gameObject.transform.localScale = scaleChange;
+
+            if (duration <= nextDrop && nextDrop > .0f)
+            {
+                Drop();
+                nextDrop -= dropInterval;
+            }
         }
         if (duration <= .0f)
         {
@@ -169,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
         duration = maxDuration;
         isAlive = true;
         isLit = true;
-        charC.Move(respawnPos-this.gameObject.transform.position);
+        charC.Move(respawnPos - this.gameObject.transform.position);
         respawnCanvas.SetActive(false);
     }
 
@@ -184,5 +194,11 @@ public class PlayerMovement : MonoBehaviour
         {
             isLit = false;
         }
-    } 
+    }
+
+    void Drop()
+    {
+        Debug.Log("drop");
+        Instantiate(waxDrop, new Vector3 (this.transform.position.x+1, this.transform.position.y, this.transform.position.z+1), Quaternion.identity);
+    }
 }
