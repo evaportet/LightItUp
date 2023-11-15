@@ -179,5 +179,10 @@ public class PlayerMovement : MonoBehaviour
         {
             RespawnManager.GetInstance().SetNewRespawnPoint(other);
         }
-    }
+
+        if (other.gameObject.CompareTag("AirHazard"))
+        {
+            isLit = false;
+        }
+    } 
 }
