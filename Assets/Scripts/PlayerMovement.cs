@@ -18,11 +18,11 @@ public class PlayerMovement : MonoBehaviour
     bool wasGrounded;
     bool hasJumped;
     bool hasClicked = false;
-    
+
     //InputBuffer
     [SerializeField] float inputBuffer = 1f; //this variable will only be total time of inputBuffer
     float buffer;
-    
+
     //CoyoteTime
     [SerializeField] float coyoteTimeDuration = .5f; //this variable will be the total time of coyote
     float coyoteTimer;
@@ -34,9 +34,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float dropInterval = 5f;
     float nextDrop;
     public bool isAlive { get; private set; } = true;
-    public bool isLit { get; private set; } = true;
+    public bool isLit = true;
     public float meltModifier = 1f;
     public GameObject waxDrop;
+    [SerializeField] GameObject fire;
 
 
     void Start()
@@ -191,19 +192,38 @@ public class PlayerMovement : MonoBehaviour
         {
             RespawnManager.GetInstance().SetNewRespawnPoint(other);
         }
-
-        if (other.gameObject.CompareTag("AirHazard"))
+        else if (other.gameObject.CompareTag("AirHazard"))
         {
-            isLit = false;
-
-            GameObject fireObject = GameObject.FindWithTag("Fire");
-            fireObject.SetActive(false);
+            Extinguish();
         }
+        else if (other.gameObject.CompareTag("NPCandle"))
+        {
+            if (!isLit && other.gameObject.GetComponent<NPCandles>().isLit)
+            {
+                LightUp();
+            }
+            else if (isLit && !other.gameObject.GetComponent<NPCandles>().isLit)
+            {
+                other.gameObject.GetComponent<NPCandles>().LightUp();
+            }
+        }
+
     }
 
     void Drop()
     {
-        Debug.Log("drop");
-        Instantiate(waxDrop, new Vector3 (this.transform.position.x+.1f, this.transform.position.y+.1f, this.transform.position.z+.1f), Quaternion.identity);
+        Instantiate(waxDrop, new Vector3(this.transform.position.x + .1f, this.transform.position.y + .1f, this.transform.position.z + .1f), Quaternion.identity);
+    }
+
+    public void LightUp()
+    {
+        isLit = true;
+        fire.SetActive(true);
+    }
+
+    private void Extinguish()
+    {
+        isLit = false;
+        fire.SetActive(false);
     }
 }

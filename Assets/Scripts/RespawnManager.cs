@@ -49,7 +49,6 @@ public class RespawnManager : MonoBehaviour
     public void SetNewRespawnPoint(Collider col)
     {
         lastRespawnPoint= col.transform.position;
-        Debug.Log("respawn set");
     }
 
  public void RespawnPlayer()
