@@ -143,9 +143,9 @@ public class PlayerMovement : MonoBehaviour
             Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
             this.gameObject.transform.localScale = scaleChange;
 
+                Drop();
             if (duration <= nextDrop && nextDrop > .0f)
             {
-                Drop();
                 nextDrop -= dropInterval;
             }
         }
@@ -212,7 +212,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Drop()
     {
-        Instantiate(waxDrop, new Vector3(this.transform.position.x + .1f, this.transform.position.y + .1f, this.transform.position.z + .1f), Quaternion.identity);
+        waxDrop.transform.localScale = new Vector3(.3f, (Time.deltaTime * meltModifier)/maxDuration, .3f);
+        Instantiate(waxDrop, this.gameObject.transform.position, new Quaternion());
     }
 
     public void LightUp()
