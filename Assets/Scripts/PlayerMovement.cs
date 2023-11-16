@@ -199,6 +199,6 @@ public class PlayerMovement : MonoBehaviour
     void Drop()
     {
         Debug.Log("drop");
-        Instantiate(waxDrop, new Vector3 (this.transform.position.x+1, this.transform.position.y, this.transform.position.z+1), Quaternion.identity);
+        Instantiate(waxDrop, new Vector3 (this.transform.position.x+.1f, this.transform.position.y+.1f, this.transform.position.z+.1f), Quaternion.identity);
     }
 }
