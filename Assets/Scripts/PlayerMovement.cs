@@ -136,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
         {
             duration -= Time.deltaTime * meltModifier;
             Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
-            this.gameObject.transform.localScale = scaleChange;
+            this.gameObject.transform.localScale = scaleChange * 1.75f;
         }
         if (duration <= .0f)
         {
