@@ -18,9 +18,11 @@ public class PlayerMovement : MonoBehaviour
     bool wasGrounded;
     bool hasJumped;
     bool hasClicked = false;
+    
     //InputBuffer
     [SerializeField] float inputBuffer = 1f; //this variable will only be total time of inputBuffer
     float buffer;
+    
     //CoyoteTime
     [SerializeField] float coyoteTimeDuration = .5f; //this variable will be the total time of coyote
     float coyoteTimer;
@@ -183,6 +185,9 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.CompareTag("AirHazard"))
         {
             isLit = false;
+
+            GameObject fireObject = GameObject.FindWithTag("Fire");
+            fireObject.SetActive(false);
         }
     } 
 }
