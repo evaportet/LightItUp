@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float dropInterval = 5f;
     float nextDrop;
     public bool isAlive { get; private set; } = true;
-    public bool isLit { get; private set; } = true;
+    public bool isLit  = true;
     public float meltModifier = 1f;
     public GameObject waxDrop;
 
@@ -205,5 +205,10 @@ public class PlayerMovement : MonoBehaviour
     {
         Debug.Log("drop");
         Instantiate(waxDrop, new Vector3 (this.transform.position.x+.1f, this.transform.position.y+.1f, this.transform.position.z+.1f), Quaternion.identity);
+    }
+
+    private void LightUp()
+    {
+        
     }
 }
