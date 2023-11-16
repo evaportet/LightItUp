@@ -5,34 +5,20 @@ using UnityEngine;
 
 public class NPCandles : MonoBehaviour
 {
-    [SerializeField] bool isLit;
+    public bool isLit;
     CharacterController charC;
-    private void OnCollisionEnter(Collision collision)
-    {
-       if (collision.gameObject.CompareTag("Player"))
-        {
-            if(collision.gameObject.GetComponent<PlayerMovement>().isLit && !isLit)
-            {
-                isLit = true;
-            }
-            if(!collision.gameObject.GetComponent<PlayerMovement>().isLit && isLit)
-            {
-                collision.gameObject.GetComponent<PlayerMovement>().isLit = true;
-            }
-        }
-    }
+    [SerializeField] GameObject fire;
 
+    private void Start()
+    {
+        if (isLit)
+            fire.SetActive(true);
+        else 
+            fire.SetActive(false);
+    }
     public void LightUp()
     {
         isLit = true;
-        GameObject fireObject = GameObject.FindWithTag("Fire");
-        fireObject.SetActive(true);
-    }
-
-    public void Extinguish()
-    {
-        isLit = false;
-        GameObject fireObject = GameObject.FindWithTag("Fire");
-        fireObject.SetActive(false);
+        fire.SetActive(true);
     }
 }
