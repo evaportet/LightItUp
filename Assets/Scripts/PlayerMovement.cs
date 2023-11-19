@@ -133,7 +133,6 @@ public class PlayerMovement : MonoBehaviour
         playerVelocity.y += Physics.gravity.y * Time.deltaTime;
         movementDirection.y = playerVelocity.y;
         charC.Move(movementDirection * Time.deltaTime);
-        wasGrounded = isGrounded;
         #endregion
 
         #region CANDLE MELT
@@ -157,8 +156,14 @@ public class PlayerMovement : MonoBehaviour
             this.gameObject.SetActive(false);
         }
 
-        prevWaxTrail = currentWaxTrail;
+        if (!wasGrounded && isGrounded) { 
+            Debug.Log("a");
+            Drop();
+        }
+
         #endregion
+        prevWaxTrail = currentWaxTrail;
+        wasGrounded = isGrounded;
 
     }
 
