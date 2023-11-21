@@ -4,24 +4,14 @@ using UnityEngine;
 
 public class Ventilator : MonoBehaviour
 {
-    public float rotationSpeed = 30f;
+    [SerializeField] float rotationSpeed = 5f;
+    float newRotation;
+    [SerializeField] float minRotation=-35f;
+    [SerializeField] float maxRotation=30;
 
     void Update()
     {
-        float newRotation = transform.rotation.eulerAngles.y + rotationSpeed * Time.deltaTime;
-
-        if (newRotation > 30f)
-        {
-            newRotation = 30f;
-            rotationSpeed *= -1; 
-        }
-
-        else if (newRotation < -30f)
-        {
-            newRotation = -30f;
-            rotationSpeed *= -1; 
-        }
-
-        transform.rotation = Quaternion.Euler(0f, newRotation, 0f);
+       newRotation= minRotation+Mathf.PingPong(Time.time*rotationSpeed, maxRotation-minRotation);
+       transform.rotation = Quaternion.Euler(0f, newRotation, 0f);
     }
 }
