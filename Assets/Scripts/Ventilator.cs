@@ -4,12 +4,24 @@ using UnityEngine;
 
 public class Ventilator : MonoBehaviour
 {
-    // Speed of rotation in degrees per second
     public float rotationSpeed = 30f;
 
     void Update()
     {
-        // Rotate the object continuously around its up axis
-        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        float newRotation = transform.rotation.eulerAngles.y + rotationSpeed * Time.deltaTime;
+
+        if (newRotation > 30f)
+        {
+            newRotation = 30f;
+            rotationSpeed *= -1; 
+        }
+
+        else if (newRotation < -30f)
+        {
+            newRotation = -30f;
+            rotationSpeed *= -1; 
+        }
+
+        transform.rotation = Quaternion.Euler(0f, newRotation, 0f);
     }
 }
