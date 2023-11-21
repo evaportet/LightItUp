@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     public float meltModifier = 1f;
     public GameObject waxDrop;
     [SerializeField] GameObject fire;
-    GameObject currentWaxTrail;
+    [SerializeField] GameObject currentWaxTrail;
     GameObject prevWaxTrail;
 
     void Start()
@@ -143,9 +143,12 @@ public class PlayerMovement : MonoBehaviour
             Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
             this.gameObject.transform.localScale = scaleChange;
 
-            if (duration <= nextDrop && nextDrop > .0f)
+            if (currentWaxTrail == prevWaxTrail)
+                currentWaxTrail.transform.localScale = new Vector3(.3f, currentWaxTrail.transform.localScale.y + Time.deltaTime * meltModifier, .3f);
+
+            if (!wasGrounded && isGrounded)
             {
-                nextDrop -= dropInterval;
+                Drop();
             }
         }
         if (duration <= .0f)
@@ -156,10 +159,6 @@ public class PlayerMovement : MonoBehaviour
             this.gameObject.SetActive(false);
         }
 
-        if (!wasGrounded && isGrounded) { 
-            Debug.Log("a");
-            Drop();
-        }
 
         #endregion
         prevWaxTrail = currentWaxTrail;
@@ -217,15 +216,16 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("hello");
         if (other.gameObject.CompareTag("waxTrail") && isGrounded)
+        {
             Drop();
+        }
     }
 
     void Drop()
     {
         waxDrop.transform.localScale = new Vector3(.3f, (Time.deltaTime * meltModifier) / maxDuration, .3f);
-        currentWaxTrail = Instantiate(waxDrop, this.gameObject.transform.position, new Quaternion());
+        currentWaxTrail = Instantiate(waxDrop, this.gameObject.transform.position, waxDrop.transform.rotation);
     }
 
     public void LightUp()
