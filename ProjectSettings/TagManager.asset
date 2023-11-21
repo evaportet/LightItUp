@@ -7,6 +7,8 @@ TagManager:
   - RespawnPoint
   - AirHazard
   - NPCandle
+  - Fire
+  - Heat
   layers:
   - Default
   - TransparentFX
