@@ -38,6 +38,9 @@ public class PlayerMovement : MonoBehaviour
     public float meltModifier = 1f;
     public GameObject waxDrop;
     [SerializeField] GameObject fire;
+    GameObject heat;
+    float distFromSrc;
+    bool inFire;
     GameObject currentWaxTrail;
     float waxBaseHeight = 1.8372e-02f;
     [SerializeField] float waxGrowthModifier;
@@ -149,12 +152,21 @@ public class PlayerMovement : MonoBehaviour
         }
         if (duration <= .0f)
         {
-            isAlive = false;
-            isLit = false;
-            respawnCanvas.SetActive(true);
-            this.gameObject.SetActive(false);
+            Die();
         }
 
+        if (heat != null)
+        {
+            distFromSrc = heat.GetComponent<HeatHazard>().DistFromSource(this.gameObject.transform.position);
+            if (distFromSrc < 10f)
+            {
+                meltModifier = ((4 * 1) / distFromSrc)+1;
+            }
+        }
+        if (inFire)
+        {
+            meltModifier = 20f;
+        }
         if(prevPos == this.gameObject.transform.position)
         {
             if (currentWaxTrail == null)
@@ -191,6 +203,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Respawn(Vector3 respawnPos)
     {
+        Cursor.visible = false;
         duration = maxDuration;
         isAlive = true;
         isLit = true;
@@ -219,7 +232,21 @@ public class PlayerMovement : MonoBehaviour
                 other.gameObject.GetComponent<NPCandles>().LightUp();
             }
         }
+        else if (other.gameObject.CompareTag("Fire"))
+            Die();
+        else if (other.gameObject.CompareTag("Heat"))
+        {
+            heat = other.gameObject;
+        }
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Heat"))
+        {
+            heat = null;
+            meltModifier = 1f;
+        }
     }
 
     void Drop()
@@ -238,5 +265,14 @@ public class PlayerMovement : MonoBehaviour
     {
         isLit = false;
         fire.SetActive(false);
+    }
+
+    private void Die()
+    {
+        Cursor.visible = true;
+        isAlive = false;
+        isLit = false;
+        respawnCanvas.SetActive(true);
+        this.gameObject.SetActive(false);
     }
 }
