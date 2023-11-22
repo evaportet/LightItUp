@@ -38,7 +38,10 @@ public class PlayerMovement : MonoBehaviour
     public float meltModifier = 1f;
     public GameObject waxDrop;
     [SerializeField] GameObject fire;
-
+    GameObject currentWaxTrail;
+    float waxBaseHeight = 1.8372e-02f;
+    [SerializeField] float waxGrowthModifier;
+    Vector3 prevPos;
 
     void Start()
     {
@@ -71,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
         if (movementDirection != Vector3.zero)
         {
             gameObject.transform.forward = movementDirection;
+            currentWaxTrail = null;
         }
 
 
@@ -132,7 +136,6 @@ public class PlayerMovement : MonoBehaviour
         playerVelocity.y += Physics.gravity.y * Time.deltaTime;
         movementDirection.y = playerVelocity.y;
         charC.Move(movementDirection * Time.deltaTime);
-        wasGrounded = isGrounded;
         #endregion
 
         #region CANDLE MELT
@@ -143,11 +146,6 @@ public class PlayerMovement : MonoBehaviour
             Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
             this.gameObject.transform.localScale = scaleChange;
 
-            if (duration <= nextDrop && nextDrop > .0f)
-            {
-                Drop();
-                nextDrop -= dropInterval;
-            }
         }
         if (duration <= .0f)
         {
@@ -157,7 +155,21 @@ public class PlayerMovement : MonoBehaviour
             this.gameObject.SetActive(false);
         }
 
+        if(prevPos == this.gameObject.transform.position)
+        {
+            if (currentWaxTrail == null)
+            {
+                Drop();
+            }
+            else
+            {
+                currentWaxTrail.transform.localScale += new Vector3(0f, Time.deltaTime * meltModifier * waxBaseHeight * waxGrowthModifier, 0f);
+            }
+        }
+
         #endregion
+        prevPos = this.gameObject.transform.position;   
+        wasGrounded = isGrounded;
 
     }
 
@@ -212,7 +224,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Drop()
     {
-        Instantiate(waxDrop, new Vector3(this.transform.position.x + .1f, this.transform.position.y + .1f, this.transform.position.z + .1f), Quaternion.identity);
+        waxDrop.transform.localScale = new Vector3(.3f, (Time.deltaTime * meltModifier) / maxDuration, .3f);
+        currentWaxTrail = Instantiate(waxDrop, this.gameObject.transform.position, waxDrop.transform.rotation);
     }
 
     public void LightUp()
