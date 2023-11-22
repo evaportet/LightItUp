@@ -38,8 +38,10 @@ public class PlayerMovement : MonoBehaviour
     public float meltModifier = 1f;
     public GameObject waxDrop;
     [SerializeField] GameObject fire;
-    [SerializeField] GameObject currentWaxTrail;
-    GameObject prevWaxTrail;
+    GameObject currentWaxTrail;
+    float waxBaseHeight = 1.8372e-02f;
+    [SerializeField] float waxGrowthModifier;
+    Vector3 prevPos;
 
     void Start()
     {
@@ -72,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
         if (movementDirection != Vector3.zero)
         {
             gameObject.transform.forward = movementDirection;
+            currentWaxTrail = null;
         }
 
 
@@ -143,13 +146,6 @@ public class PlayerMovement : MonoBehaviour
             Vector3 scaleChange = new Vector3(1f, duration / maxDuration, 1f);
             this.gameObject.transform.localScale = scaleChange;
 
-            if (currentWaxTrail == prevWaxTrail)
-                currentWaxTrail.transform.localScale = new Vector3(.3f, currentWaxTrail.transform.localScale.y + Time.deltaTime * meltModifier, .3f);
-
-            if (!wasGrounded && isGrounded)
-            {
-                Drop();
-            }
         }
         if (duration <= .0f)
         {
@@ -159,9 +155,20 @@ public class PlayerMovement : MonoBehaviour
             this.gameObject.SetActive(false);
         }
 
+        if(prevPos == this.gameObject.transform.position)
+        {
+            if (currentWaxTrail == null)
+            {
+                Drop();
+            }
+            else
+            {
+                currentWaxTrail.transform.localScale += new Vector3(0f, Time.deltaTime * meltModifier * waxBaseHeight * waxGrowthModifier, 0f);
+            }
+        }
 
         #endregion
-        prevWaxTrail = currentWaxTrail;
+        prevPos = this.gameObject.transform.position;   
         wasGrounded = isGrounded;
 
     }
@@ -213,13 +220,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("waxTrail") && isGrounded)
-        {
-            Drop();
-        }
     }
 
     void Drop()
