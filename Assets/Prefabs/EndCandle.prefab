@@ -324,6 +324,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLit: 0
   fire: {fileID: 6861783919436458279}
+  scenes:
+  - Level2
+  - Level3
+  levelChangeDelay: 3
+  currentScene: 0
 --- !u!65 &7516552532212939287
 BoxCollider:
   m_ObjectHideFlags: 0
