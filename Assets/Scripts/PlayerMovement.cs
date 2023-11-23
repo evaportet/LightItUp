@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -45,6 +46,8 @@ public class PlayerMovement : MonoBehaviour
     float waxBaseHeight = 1.8372e-02f;
     [SerializeField] float waxGrowthModifier;
     Vector3 prevPos;
+    bool waxDropPressed = false;
+
 
     void Start()
     {
@@ -77,9 +80,7 @@ public class PlayerMovement : MonoBehaviour
         if (movementDirection != Vector3.zero)
         {
             gameObject.transform.forward = movementDirection;
-            currentWaxTrail = null;
         }
-
 
         //Jump
         isGrounded = charC.isGrounded;
@@ -101,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
                 hasClicked = true;
                 buffer = inputBuffer;
             }
+
         }
 
         //Input Buffer Logic
@@ -159,14 +161,19 @@ public class PlayerMovement : MonoBehaviour
             distFromSrc = heat.GetComponent<HeatHazard>().DistFromSource(this.gameObject.transform.position);
             if (distFromSrc < 10f)
             {
-                meltModifier = ((4 * 1) / distFromSrc)+1;
+                meltModifier = ((4 * 1) / distFromSrc) + 1;
             }
         }
         if (inFire)
         {
             meltModifier = 20f;
         }
-        if(prevPos == this.gameObject.transform.position)
+        //if(prevPos == this.gameObject.transform.position)
+        if (Input.GetButtonDown("WaxDrop"))
+            waxDropPressed = true;
+        if (Input.GetButtonUp("WaxDrop"))
+         waxDropPressed = false; 
+        if(waxDropPressed && isLit )
         {
             if (currentWaxTrail == null)
             {
@@ -179,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         #endregion
-        prevPos = this.gameObject.transform.position;   
+        prevPos = this.gameObject.transform.position;
         wasGrounded = isGrounded;
 
     }
@@ -208,6 +215,7 @@ public class PlayerMovement : MonoBehaviour
         isLit = true;
         charC.Move(respawnPos - this.gameObject.transform.position);
         respawnCanvas.SetActive(false);
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -246,12 +254,17 @@ public class PlayerMovement : MonoBehaviour
             heat = null;
             meltModifier = 1f;
         }
+        else if (other.gameObject.CompareTag("waxTrail"))
+        {
+            currentWaxTrail = null;
+        }
     }
 
     void Drop()
     {
-        waxDrop.transform.localScale = new Vector3(.3f, (Time.deltaTime * meltModifier) / maxDuration, .3f);
-        currentWaxTrail = Instantiate(waxDrop, this.gameObject.transform.position, waxDrop.transform.rotation);
+            waxDrop.transform.localScale = new Vector3(.3f, (Time.deltaTime * meltModifier) / maxDuration, .3f);
+            currentWaxTrail = Instantiate(waxDrop, this.gameObject.transform.position, waxDrop.transform.rotation);
+        Debug.Log("a");
     }
 
     public void LightUp()
