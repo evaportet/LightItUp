@@ -2225,6 +2225,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 135756642000475821, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      propertyPath: sprint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3837663348675104489, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -2292,6 +2296,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1813479747}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      insertIndex: 6
+      addedObject: {fileID: 908670781}
     - targetCorrespondingSourceObject: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       insertIndex: -1
       addedObject: {fileID: 908670780}
@@ -2624,6 +2631,29 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 908670771}
   m_Mesh: {fileID: 3284058204844978654, guid: 1e5bc16164853442da2ea9819baf0234, type: 3}
+--- !u!114 &908670781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908670771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da2b3c72ed7d9ea4c8739f368280768f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnCanvas: {fileID: 0}
+  inputBuffer: 1
+  coyoteTimeDuration: 0.5
+  maxDuration: 10
+  duration: 0
+  dropInterval: 5
+  isLit: 1
+  meltModifier: 1
+  waxDrop: {fileID: 0}
+  fire: {fileID: 0}
+  waxGrowthModifier: 0
 --- !u!1 &911848819
 GameObject:
   m_ObjectHideFlags: 0
