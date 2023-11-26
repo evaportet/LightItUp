@@ -264,7 +264,6 @@ public class Player : MonoBehaviour
     {
         waxDrop.transform.localScale = new Vector3(.3f, (Time.deltaTime * meltModifier) / maxDuration, .3f);
         currentWaxTrail = Instantiate(waxDrop, this.gameObject.transform.position, waxDrop.transform.rotation);
-        Debug.Log("a");
     }
 
     public void LightUp()
