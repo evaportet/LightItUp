@@ -11,7 +11,7 @@ public class RespawnManager : MonoBehaviour
     public static RespawnManager instance { get; private set; }
 
     public GameObject player;
-    PlayerMovement pMov;
+    Player pMov;
 
     private void Awake()
     {
@@ -23,7 +23,7 @@ public class RespawnManager : MonoBehaviour
 
     void Start()
     {
-        pMov = player.GetComponent<PlayerMovement>();
+        pMov = player.GetComponent<Player>();
         initialPosition = player.transform.position;
         lastRespawnPoint = initialPosition;
     }
