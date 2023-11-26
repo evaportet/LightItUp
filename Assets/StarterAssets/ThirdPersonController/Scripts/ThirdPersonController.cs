@@ -88,8 +88,8 @@ namespace StarterAssets
         private float _animationBlend;
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
-        private float _verticalVelocity;
-        private float _terminalVelocity = 53.0f;
+        public float _verticalVelocity;
+        private float _terminalVelocity = 50.0f;
         bool wasGrounded;
         bool inCoyote;
         private float _coyoteDelta = .0f;
@@ -195,6 +195,8 @@ namespace StarterAssets
             {
                 _animator.SetBool(_animIDGrounded, Grounded);
             }
+
+
         }
 
         private void CameraRotation()
