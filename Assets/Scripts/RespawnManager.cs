@@ -42,16 +42,16 @@ public class RespawnManager : MonoBehaviour
     }
 
     public static RespawnManager GetInstance()
-    { 
+    {
         return instance;
     }
 
     public void SetNewRespawnPoint(Collider col)
     {
-        lastRespawnPoint= col.transform.position;
+        lastRespawnPoint = col.transform.position;
     }
 
- public void RespawnPlayer()
+    public void RespawnPlayer()
     {
         player.gameObject.SetActive(true);
         lastRespawnPoint.y += 1;
