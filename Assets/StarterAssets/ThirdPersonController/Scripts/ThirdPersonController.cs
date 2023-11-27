@@ -62,7 +62,6 @@ namespace StarterAssets
         [Tooltip("Timer for coyote time")]
         public float coyoteBuffer;
 
-
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject CinemachineCameraTarget;
@@ -93,6 +92,7 @@ namespace StarterAssets
         bool wasGrounded;
         bool inCoyote;
         private float _coyoteDelta = .0f;
+        bool hasJumped = false;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -298,6 +298,8 @@ namespace StarterAssets
 
             if (Grounded)
             {
+                hasJumped = false;
+
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
@@ -315,10 +317,11 @@ namespace StarterAssets
                 }
 
                 // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (_input.jump && _jumpTimeoutDelta <= 0.0f && !hasJumped)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    hasJumped = true;
 
                     // update animator if using character
                     if (_hasAnimator)
@@ -333,12 +336,13 @@ namespace StarterAssets
                     _jumpTimeoutDelta -= Time.deltaTime;
                 }
             }
-            else if (inCoyote)
+            else if (inCoyote && !hasJumped)
             {
                 if (_input.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    hasJumped = true;
 
                     // update animator if using character
                     if (_hasAnimator)
@@ -388,6 +392,11 @@ namespace StarterAssets
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
+            }
+
+            if (this.gameObject.transform.position.y > 50)
+            {
+                _input.jump = false;
             }
             wasGrounded = Grounded;
         }
