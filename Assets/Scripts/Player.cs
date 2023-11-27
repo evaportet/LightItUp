@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
             distFromSrc = heat.GetComponent<HeatHazard>().DistFromSource(this.gameObject.transform.position);
             if (distFromSrc < 10f)
             {
-                meltModifier = ((4 * 1) / distFromSrc) + 1;
+                meltModifier = ((4 * 1) / distFromSrc) + 2;
             }
         }
         if (inFire)
@@ -101,6 +101,7 @@ public class Player : MonoBehaviour
         duration = maxDuration;
         isAlive = true;
         isLit = true;
+        LightUp();
         respawnCanvas.SetActive(false);
         this.GetComponent<ThirdPersonController>().Teleport(respawnPos);
     }
@@ -162,9 +163,13 @@ public class Player : MonoBehaviour
 
     private void Extinguish()
     {
+        if (isLit == true)
+        {
+            SFXManager.GetInstance().PlayAudioClip(this.transform, extinguishClip);
+        }
         isLit = false;
         fire.SetActive(false);
-        SFXManager.GetInstance().PlayAudioClip(this.transform, extinguishClip);
+        
     }
 
     private void Die()

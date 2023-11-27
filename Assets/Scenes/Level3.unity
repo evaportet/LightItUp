@@ -563,7 +563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3881350364397788237, guid: 5aa588777f9d26e4c824094a009d3a02, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 36.525
+      value: 36.91
       objectReference: {fileID: 0}
     - target: {fileID: 3881350364397788237, guid: 5aa588777f9d26e4c824094a009d3a02, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1154,6 +1154,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerArmature
       objectReference: {fileID: 0}
+    - target: {fileID: 4416926081852918490, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      propertyPath: JumpHeight
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4542607177602396597, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      propertyPath: maxDuration
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 4542607177602396597, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       propertyPath: respawnCanvas
       value: 
@@ -1229,6 +1237,18 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 759807466}
+    - target: {fileID: 8516691077375619802, guid: bcac8f732fe44874ba002b9980a432f6, type: 3}
+      propertyPath: lastRespawnPoint.x
+      value: 29.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516691077375619802, guid: bcac8f732fe44874ba002b9980a432f6, type: 3}
+      propertyPath: lastRespawnPoint.y
+      value: 40.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516691077375619802, guid: bcac8f732fe44874ba002b9980a432f6, type: 3}
+      propertyPath: lastRespawnPoint.z
+      value: 44.2
+      objectReference: {fileID: 0}
     - target: {fileID: 8582497047258393065, guid: bcac8f732fe44874ba002b9980a432f6, type: 3}
       propertyPath: m_Name
       value: RespawnManager
