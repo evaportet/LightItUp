@@ -444,7 +444,9 @@ namespace StarterAssets
 
         public void Teleport(Vector3 newPos)
         {
-            _controller.Move(newPos-this.gameObject.transform.position);
+            _controller.enabled = false;
+            this.gameObject.transform.position = newPos;
+            _controller.enabled = true;
         }
     }
 }
