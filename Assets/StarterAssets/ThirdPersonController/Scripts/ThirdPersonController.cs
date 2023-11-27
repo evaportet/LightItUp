@@ -1,4 +1,4 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -59,6 +59,9 @@ namespace StarterAssets
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
 
+        [Tooltip("Timer for coyote time")]
+        public float coyoteBuffer;
+
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject CinemachineCameraTarget;
@@ -84,8 +87,12 @@ namespace StarterAssets
         private float _animationBlend;
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
-        private float _verticalVelocity;
-        private float _terminalVelocity = 53.0f;
+        public float _verticalVelocity;
+        private float _terminalVelocity = 50.0f;
+        bool wasGrounded;
+        bool inCoyote;
+        private float _coyoteDelta = .0f;
+        bool hasJumped = false;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -135,7 +142,7 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -188,6 +195,8 @@ namespace StarterAssets
             {
                 _animator.SetBool(_animIDGrounded, Grounded);
             }
+
+
         }
 
         private void CameraRotation()
@@ -281,8 +290,16 @@ namespace StarterAssets
 
         private void JumpAndGravity()
         {
+            if (wasGrounded && Grounded)
+            {
+                inCoyote = true;
+                _coyoteDelta = coyoteBuffer;
+            }
+
             if (Grounded)
             {
+                hasJumped = false;
+
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
@@ -300,10 +317,11 @@ namespace StarterAssets
                 }
 
                 // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (_input.jump && _jumpTimeoutDelta <= 0.0f && !hasJumped)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    hasJumped = true;
 
                     // update animator if using character
                     if (_hasAnimator)
@@ -316,6 +334,31 @@ namespace StarterAssets
                 if (_jumpTimeoutDelta >= 0.0f)
                 {
                     _jumpTimeoutDelta -= Time.deltaTime;
+                }
+            }
+            else if (inCoyote && !hasJumped)
+            {
+                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                {
+                    // the square root of H * -2 * G = how much velocity needed to reach desired height
+                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    hasJumped = true;
+
+                    // update animator if using character
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDJump, true);
+                    }
+
+                    inCoyote = false;
+                }
+                if (_jumpTimeoutDelta >= 0.0f)
+                {
+                    _jumpTimeoutDelta -= Time.deltaTime;
+                }
+                if (_coyoteDelta >= 0.0f)
+                {
+                    _coyoteDelta -= Time.deltaTime;
                 }
             }
             else
@@ -341,11 +384,21 @@ namespace StarterAssets
                 _input.jump = false;
             }
 
+            if (_coyoteDelta <= 0.0f)
+                inCoyote = false;
+
+
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
+
+            if (this.gameObject.transform.position.y > 50)
+            {
+                _input.jump = false;
+            }
+            wasGrounded = Grounded;
         }
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
@@ -387,6 +440,11 @@ namespace StarterAssets
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
+        }
+
+        public void Teleport(Vector3 newPos)
+        {
+            _controller.Move(newPos-this.gameObject.transform.position);
         }
     }
 }
