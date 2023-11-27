@@ -1155,17 +1155,9 @@ PrefabInstance:
       value: PlayerArmature
       objectReference: {fileID: 0}
     - target: {fileID: 4542607177602396597, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
-      propertyPath: maxDuration
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4542607177602396597, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       propertyPath: respawnCanvas
       value: 
       objectReference: {fileID: 104870806}
-    - target: {fileID: 4542607177602396597, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
-      propertyPath: waxGrowthModifier
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
