@@ -76,6 +76,7 @@ public class Player : MonoBehaviour
             waxDropPressed = true;
         if (Input.GetButtonUp("WaxDrop"))
             waxDropPressed = false;
+
         if (waxDropPressed && isLit)
         {
             if (currentWaxTrail == null)
@@ -84,7 +85,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                currentWaxTrail.transform.localScale += new Vector3(0f, Time.deltaTime * meltModifier * waxBaseHeight * waxGrowthModifier, 0f);
+                currentWaxTrail.transform.localScale += new Vector3(0f, Time.deltaTime * meltModifier * waxGrowthModifier, 0f);
             }
         }
 

@@ -1064,7 +1064,7 @@ Transform:
   - {fileID: 272993188807782130}
   - {fileID: 4898592275057576645}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6982812146204527121
 Animator:
@@ -1198,14 +1198,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnCanvas: {fileID: 0}
-  maxDuration: 50
+  maxDuration: 100
   duration: 0
   dropInterval: 5
   isLit: 1
   meltModifier: 1
   waxDrop: {fileID: 3308721964095204596, guid: 2ebe45d5fbc149446b836719e507b1fe, type: 3}
   fire: {fileID: 7768834303870690356}
-  waxGrowthModifier: 1
+  waxGrowthModifier: 0.25
   lightUpClip: {fileID: 8300000, guid: f48640db50aaab84ca28a81388de3771, type: 3}
   extinguishClip: {fileID: 8300000, guid: 5e85ba3b9bffcec4d9c23e214641ebad, type: 3}
 --- !u!114 &4416926081852918493
