@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR;
+using static SFXManager;
 
 public class Player : MonoBehaviour
 {
@@ -25,9 +26,13 @@ public class Player : MonoBehaviour
     bool inFire;
     GameObject currentWaxTrail;
     float waxBaseHeight = 1.8372e-02f;
-    [SerializeField] float waxGrowthModifier;
     Vector3 prevPos;
     bool waxDropPressed = false;
+    [SerializeField] float waxGrowthModifier;
+
+    [Header("PLayer Audio")]
+    public AudioClip lightUpClip;
+    public AudioClip extinguishClip;
 
 
     void Start()
@@ -151,12 +156,14 @@ public class Player : MonoBehaviour
     {
         isLit = true;
         fire.SetActive(true);
+        SFXManager.GetInstance().PlayAudioClip(this.transform, lightUpClip);
     }
 
     private void Extinguish()
     {
         isLit = false;
         fire.SetActive(false);
+        SFXManager.GetInstance().PlayAudioClip(this.transform, extinguishClip);
     }
 
     private void Die()
