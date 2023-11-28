@@ -92,6 +92,9 @@ public class Player : MonoBehaviour
         #endregion
         prevPos = this.gameObject.transform.position;
 
+        if (Input.GetButtonDown("Cancel"))
+            Application.Quit();
+
     }
     //}
 
